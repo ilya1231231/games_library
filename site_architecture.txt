@@ -1,50 +1,44 @@
 1. Категории 
-	a)Имя категории 
-	b)Описание
-	c)URL
+	a)Имя категории 	CharField
+	b)Описание	TextField
+	c)URL		SlugField
 2. Игры
-	a)Название
-	b)Описание
+	a)Название	CharField
+	b)Описание	TextField
 	с)Жанр	MANYTOMANY
-	d)Постер
-	e)Главные герои игры	MANYTOMANY
-	f)Год
-	g)Страна - разрабочик
-	h)Компания - разработчик 	FOREIGNKEY
-	i)Рейтинг игры
-	g)Категория	FOREIGNKEY
-	k)URL
-	l)черновик
+	d)Постер		ImageField
+	e)Год		DateField
+	f)Страна - разрабочик	CharField
+	g)Компания - разработчик 	MANYTOMANY
+	h)Категория	FOREIGNKEY
+	y)URL		SlugField
+	g)черновик	BolleanField
 3.Отзывы
 	a) EMAIL
-	b) Имя
-	c) Текст
+	b) Имя	CharField
+	c) Текст	TextField
 	d)Родитель(чему отправили отзыв)
-	у)Игра	FOREIGNKEY
+	e)Игра	FOREIGNKEY
 4.Жанры
-	a)Имя
-	b)Описание
-	c)URL
+	a)Имя	CharField
+	b)Описание	TextField
+	c)URL		SlugField
 5.Кадры из игры
-	a)Название
-	b)Описание
-	с)Изображение
+	a)Название	CharField
+	b)Описание	TextField
+	с)Изображение	ImageField
 	d)Игра	 FOREIGNKEY
 
 5.Компания - разработчик
 	a)Название
 	b)Описание
 	с)Изображение
-6)Главные герои игры
-	a)Имя
-	b)Описание
-	с)Изображение
 7)Рейтинг игры
-	а)ip
+	а)ip IP
 	b)Игра 	FOREIGNKEY
 	с)Звезда  FOREIGNKEY
 8)Звезды рейтинга
-	a)значение
+	a)значение int
 	
 
 	
