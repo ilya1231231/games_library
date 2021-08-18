@@ -1,3 +1,12 @@
 from django.contrib import admin
-
-# Register your models here.
+from .models import (
+        Category,
+        Company,
+        Genre,
+        GamePlatform,
+        Game,
+        GameScreenShoots,
+        RatingStar,
+        Rating,
+        Review
+)

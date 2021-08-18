@@ -1,5 +1,5 @@
 from django.db import models
-
+from datetime import date
 
 
 class Category(models.Model):
@@ -95,17 +95,17 @@ class GamePlatform(models.Model):
 
 
 class Game(models.Model):
-
     '''Игра'''
     title = models.CharField('Название', max_length=160)
     description = models.TextField('Описание')
     poster = models.ImageField('Постер', upload_to='games/')
     year = models.PositiveIntegerField('Дата выхода', default=2000)
     country = models.CharField('Страна разработчик', max_length=160)
+    release_date = models.DateField('Дата выхода', default=date.today)
     company = models.ManyToManyField(Company, verbose_name='Компания разработчик')
     genre = models.ManyToManyField(Genre, verbose_name='Жанры игры')
     game_platform = models.ManyToManyField(GamePlatform, verbose_name='Игровая платформа')
-    category = models.ForeignKey(Category,verbose_name='Категория', on_delete=models.SET_NULL, null=True)
+    category = models.ForeignKey(Category, verbose_name='Категория', on_delete=models.SET_NULL, null=True)
     url = models.SlugField(max_length=160, unique=True)
     draft = models.BooleanField('Черновик', default=False)
 
@@ -117,4 +117,60 @@ class Game(models.Model):
         verbose_name_plural = 'Игры'
 
 
+class GameScreenShoots(models.Model):
+    '''Скриншоты из игры'''
+    title = models.CharField('Заголовок', max_length=160)
+    description = models.TextField('Описание')
+    image = models.ImageField('Изображение', upload_to='screen_shoots/')
+    game = models.ForeignKey(Game, verbose_name='Игра', on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name = 'Скриншот из игры'
+        verbose_name_plural = 'Скриншоты из игры'
+
+
+class RatingStar(models.Model):
+    '''Звезды рейтинга'''
+    value = models.SmallIntegerField('Значение', default=0)
+
+    def __str__(self):
+        return self.value
+
+    class Meta:
+        verbose_name = 'Звезда рейтинга'
+        verbose_name_plural = 'Звезды рейтинга'
+
+
+class Rating(models.Model):
+    '''Рейтинг'''
+    ip = models.CharField('IP', max_length=15)
+    star = models.ForeignKey(RatingStar, on_delete=models.CASCADE, verbose_name='Звезда')
+    game = models.ForeignKey(Game, on_delete=models.CASCADE, verbose_name='Игра')
+
+    def __str__(self):
+        return '{} - {}'.format(self.star, self.game)
+
+    class Meta:
+        verbose_name = 'Звезда рейтинга'
+        verbose_name_plural = 'Звезды рейтинга'
+
+
+class Review(models.Model):
+    '''Отзыв'''
+    email = models.EmailField()
+    name = models.CharField('Имя', max_length=160)
+    text = models.TextField('Сообщение', max_length=5000)
+    parent = models.ForeignKey(
+        'self', verbose_name='Родитель',on_delete=models.SET_NULL, blank=True, null=True
+    )
+    game = models.ForeignKey(Game, verbose_name='Игра', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return '{} - {}'.format(self.name, self.game)
+
+    class Meta:
+        verbose_name = 'Отзыв'
+        verbose_name_plural = 'Отзывы'
