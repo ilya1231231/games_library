@@ -1,6 +1,8 @@
 from django.db import models
 from datetime import date
 
+from django.urls import reverse
+
 
 class Category(models.Model):
     '''Категории игр'''
@@ -111,6 +113,9 @@ class Game(models.Model):
 
     def __str__(self):
         return self.title
+
+    def get_absolute_url(self):
+        return reverse('game_detail', kwargs={'slug': self.url})
 
     class Meta:
         verbose_name = 'Игра'
