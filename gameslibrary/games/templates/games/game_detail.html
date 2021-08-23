@@ -100,9 +100,9 @@
                 Об игре {{ game.title }}
             </h3>
             <p>
-                <img src="bundles/images/about.jpg" class="img-fluid" alt="">
-                <img src="bundles/images/admin.jpg" class="img-fluid" alt="">
-                <img src="bundles/images/d1.jpg" class="img-fluid" alt="">
+                {% for image in game.gamescreenshoots_set.all %}
+                <img src="{{ image.image.url }}" width="250" height="auto"  alt="{{ image.description }}">
+                {% endfor %}
             </p>
             <p class="editContent" style="outline: none; cursor: inherit;">
                 {{ game.description }}
