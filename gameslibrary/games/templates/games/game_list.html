@@ -1,28 +1,32 @@
 {% extends 'games/base.html' %}
-
+{% block header %} bg1 {% endblock header %}
 {% block game %}
-    {% for game in game_list %}
-    <div class="col-md-4 product-men">
-        <div class="product-shoe-info editContent text-center mt-lg-4" >
-            <div class="men-thumb-item">
-                <img src="{{ game.poster.url }}" class="img-fluid" alt="" >
-            </div>
-            <div class="item-info-product">
-                <h4 class="">
-                    <a href="{{ game.get_absolute_url }}" class="editContent" >
-                        {{ game.title }}
-                    </a>
-                </h4>
-                <ul class="stars">
-                    <li><a href="#"><span class="fa fa-star" aria-hidden="true" ></span></a></li>
-                    <li><a href="#"><span class="fa fa-star" aria-hidden="true" ></span></a></li>
-                    <li><a href="#"><span class="fa fa-star-half-o" aria-hidden="true" ></span></a></li>
-                    <li><a href="#"><span class="fa fa-star-half-o" aria-hidden="true" ></span></a></li>
-                    <li><a href="#"><span class="fa fa-star-o" aria-hidden="true" ></span></a></li>
-                </ul>
+<div class="left-ads-display col-lg-9">
+    <div class="row">
+        {% for game in game_list %}
+        <div class="col-md-4 product-men">
+            <div class="product-shoe-info editContent text-center mt-lg-4" >
+                <div class="men-thumb-item">
+                    <img src="{{ game.poster.url }}" class="img-fluid" alt="" >
+                </div>
+                <div class="item-info-product">
+                    <h4 class="">
+                        <a href="{{ game.get_absolute_url }}" class="editContent" >
+                            {{ game.title }}
+                        </a>
+                    </h4>
+                    <ul class="stars">
+                        <li><a href="#"><span class="fa fa-star" aria-hidden="true" ></span></a></li>
+                        <li><a href="#"><span class="fa fa-star" aria-hidden="true" ></span></a></li>
+                        <li><a href="#"><span class="fa fa-star-half-o" aria-hidden="true" ></span></a></li>
+                        <li><a href="#"><span class="fa fa-star-half-o" aria-hidden="true" ></span></a></li>
+                        <li><a href="#"><span class="fa fa-star-o" aria-hidden="true" ></span></a></li>
+                    </ul>
+                </div>
             </div>
         </div>
-    </div>
     {% endfor %}
+    </div>
+</div>
 {% endblock game %}
 

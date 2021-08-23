@@ -1,17 +1,19 @@
 {% extends 'base.html' %}
 {% block content %}
-<section class="ab-info-main py-md-5 py-4 editContent"
-         style="padding-left: 3rem; padding-right: 3rem;">
-    <div class="container-fluid py-md-3">
+    <section class="ab-info-main py-md-5 py-4 editContent"
+             style="padding-left: 3rem; padding-right: 3rem;">
+        {% block container %}
+        <div class="container-fluid py-md-3">
+        {% endblock container %}
         <div class="row">
-            <div class="left-ads-display col-lg-9">
-                <div class="row">
-                    {% include 'include/sidebar.html' %}
-                    {% block game %}
-                    {% endblock game %}
-                </div>
-            </div>
+        {% block sidebar %}
+        <div class="side-bar col-lg-3">
+        {% endblock sidebar %}
+            {% include 'include/sidebar.html' %}
         </div>
-    </div>
-</section>
+            {% block game %}
+            {% endblock game %}
+        </div>
+        </div>
+    </section>
 {% endblock %}
