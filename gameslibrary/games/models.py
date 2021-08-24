@@ -169,7 +169,7 @@ class Review(models.Model):
     name = models.CharField('Имя', max_length=160)
     text = models.TextField('Сообщение', max_length=5000)
     parent = models.ForeignKey(
-        'self', verbose_name='Родитель',on_delete=models.SET_NULL, blank=True, null=True
+        'self', verbose_name='Родитель', on_delete=models.SET_NULL, blank=True, null=True
     )
     game = models.ForeignKey(Game, verbose_name='Игра', on_delete=models.CASCADE)
 
