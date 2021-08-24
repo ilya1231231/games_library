@@ -2,6 +2,14 @@
 {% block title %} {{ game.title }} {% endblock title %}
 {% block container %}
     <div class="container py-md-3">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <strong>{{ message }}</strong>
+                    <button type="button" class="cl-btn-7" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
 {% endblock container %}
 {% block sidebar %}
     <div class="side-bar col-lg-4">

@@ -1,4 +1,4 @@
-
+from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView
 from django.views.generic.base import View
@@ -33,4 +33,5 @@ class AddReview(View):
             form = form.save(commit=False)      #Хотим приостановить сохранение перед привязкой к игре
             form.game = game       #Сохраняем форму в определенную игру
             form.save()
+        messages.add_message(request, messages.INFO, 'Ваш отзыв успешно добавлен')
         return redirect(game.get_absolute_url())
