@@ -117,6 +117,9 @@ class Game(models.Model):
     def get_absolute_url(self):
         return reverse('game_detail', kwargs={'slug': self.url})
 
+    def get_review(self):
+        return self.review_set.filter(parent__isnull=True)      #Возвращаем комментарии без родителей
+
     class Meta:
         verbose_name = 'Игра'
         verbose_name_plural = 'Игры'
