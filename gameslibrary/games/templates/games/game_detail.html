@@ -1,4 +1,5 @@
 {% extends 'games/base.html' %}
+{% load static %}
 {% block title %} {{ game.title }} {% endblock title %}
 {% block container %}
     <div class="container py-md-3">
@@ -6,7 +7,6 @@
             {% for message in messages %}
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
                     <strong>{{ message }}</strong>
-                    <button type="button" class="cl-btn-7" aria-label="Close"></button>
                 </div>
             {% endfor %}
         {% endif %}
@@ -131,12 +131,13 @@
             <div class="single-form-left">
                 <!-- contact form grid -->
                 <div class="contact-single">
-                    <h3 class="editContent" style="outline: none; cursor: inherit;">
-                                    <span class="sub-tittle editContent"
-                                          style="outline: none; cursor: inherit;">02</span>Оставить
-                        отзыв</h3>
-                    <form action="{% url 'add_review' game.id %}" method="post" class="mt-4">
+                    <h3 class="editContent">
+                        <span class="sub-tittle editContent">Количество комментариев {{ game.review_set.count }}</span>
+                        Оставить отзыв
+                    </h3>
+                    <form action="{% url 'add_review' game.id %}" method="post" class="mt-4" id="formReview">
                         {% csrf_token %}
+                        <input type="hidden" name="parent" id="contactparent" value="">
                         <div class="form-group editContent">
                             <label for="contactcomment" class="editContent">
                                 Ваш комментарий
@@ -169,9 +170,9 @@
                 <!--  //contact form grid ends here -->
             </div>
         </div>
-    {% for review in game.review_set.all %}
+    {% for review in game.get_review %}
             <div class="media py-5">
-                <img src="bundles/images/te2.jpg" class="mr-3 img-fluid" alt="image">
+                <img src="{% static 'images/te2.jpg'%}" width="70" height="auto" class="mr-3 img-fluid" alt="image">
                 <div class="media-body mt-4">
                     <h5 class="mt-0 editContent">
                         {{ review.name }}
@@ -179,26 +180,28 @@
                     <p class="mt-2 editContent">
                         {{ review.text }}
                     </p>
-<!--                    <div class="media mt-5 editContent"-->
-<!--                         style="outline: none; cursor: inherit;">-->
-<!--                        <a class="pr-3" href="#">-->
-<!--                            <img src="bundles/images/te1.jpg" class="img-fluid "-->
-<!--                                 alt="image" style="outline: none; cursor: inherit;">-->
-<!--                        </a>-->
-<!--                        <div class="media-body">-->
-<!--                            <h5 class="mt-0 editContent"-->
-<!--                                style="outline: none; cursor: inherit;">Leia Organa</h5>-->
-<!--                            <p class="mt-2 editContent"-->
-<!--                               style="outline: none; cursor: inherit;"> Cras sit amet-->
-<!--                                nibh libero, in gravida nulla. Nulla vel metus-->
-<!--                                scelerisque ante sollicitudin. Cras purus odio,-->
-<!--                                vestibulum in vulputate at, tempus viverra turpis. Fusce-->
-<!--                                condimentum nunc ac nisi vulputate fringilla..</p>-->
-<!--                        </div>-->
-<!--                    </div>-->
-                </div>
+                    <a href="#formReview" onclick="addReview('{{ review.name }}', '{{ review.id }}')">Ответить</a>
+                    {% for item in review.review_set.all %}
+                        <div class="media mt-5 editContent">
+                            <a class="pr-3" href="#">
+                                <img src="{% static 'images/te1.jpg'%}" width="50" height="auto" class="img-fluid"
+                                     alt="image">
+                            </a>
+                            <div class="media-body">
+                                <h5 class="mt-0 editContent">{{ item.name }}</h5>
+                                <p class="mt-2 editContent"> {{ item.text }}</p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    </div>
             </div>
     {% endfor %}
         </div>
         </div>
+        <script>
+            function addReview(name, id) {
+                document.getElementById("contactparent").value = id;
+                document.getElementById("contactcomment").innerText = `${name}, `
+            }
+        </script>
 {% endblock game %}
