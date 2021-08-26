@@ -31,6 +31,8 @@ class AddReview(View):
         game = Game.objects.get(id=pk)
         if form.is_valid():
             form = form.save(commit=False)      #Хотим приостановить сохранение перед привязкой к игре
+            if request.POST.get('parent', None):    #Ищем в пост запросе ключ parent(Имя нашего поля)
+                form.parent_id = int(request.POST.get('parent'))    #достаем значение нашего ключа parent
             form.game = game       #Сохраняем форму в определенную игру
             form.save()
         messages.add_message(request, messages.INFO, 'Ваш отзыв успешно добавлен')
