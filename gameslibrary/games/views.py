@@ -3,14 +3,22 @@ from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView
 from django.views.generic.base import View
 from .forms import ReviewForm
-from .models import Game
+from .models import Game, Category
+
 
 
 class GameView(ListView):
     '''Список игр'''
     model = Game
     queryset = Game.objects.filter(draft=False)
-    # template_name = 'games/game_table.html'
+
+    # def get_context_data(self,*args, **kwargs):
+    #     context = super().get_context_data(*args, **kwargs)
+    #     context['categories'] = Category.objects.all()
+    #     return context
+
+
+
 
 
 
