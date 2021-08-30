@@ -16,8 +16,9 @@ from .models import (
 )
 
 
-class GameAdminForm(forms.ModelForm):
-    description = forms.CharField(widget=CKEditorUploadingWidget())
+class GameAdminForm(forms.ModelForm):  # Подключаю CKeditor
+    description = forms.CharField(label='Описание',
+        widget=CKEditorUploadingWidget())  # В качестве поля формы выбрал описание из модели Game
 
     class Meta:
         model = Game
