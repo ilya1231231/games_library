@@ -1,5 +1,7 @@
 from django.contrib import admin
 from django.utils.safestring import mark_safe
+from django import forms
+from ckeditor_uploader.widgets import CKEditorUploadingWidget
 
 from .models import (
     Category,
@@ -12,6 +14,15 @@ from .models import (
     Rating,
     Review
 )
+
+
+class GameAdminForm(forms.ModelForm):  # Подключаю CKeditor
+    description = forms.CharField(label='Описание',
+        widget=CKEditorUploadingWidget())  # В качестве поля формы выбрал описание из модели Game
+
+    class Meta:
+        model = Game
+        fields = '__all__'
 
 
 class ReviewInLine(admin.TabularInline):  # Класс для отображения отзыва в игре
@@ -48,6 +59,7 @@ class GameAdmin(admin.ModelAdmin):
     save_as = True  # Функция сохранения как нового объекта
     list_editable = ('draft',)  # Добавил чекбокс для удобного сохранения в черновик
     readonly_fields = ('get_image',)
+    form = GameAdminForm
     '''Группировка полей для удобной работы'''
     fieldsets = (
         (None, {
