@@ -34,7 +34,9 @@
                     <li style="list-style: none">
                                     <span><b>Компания - разработчик</b>
                                         {% for company in game.company.all %}
-                                            {{ company.name }}
+                                            <a href="{% url 'company_detail' company.name %}">
+                                                {{ company.name }}
+                                            </a>
                                         {% endfor %}
                                     </span>
                     </li>
@@ -100,6 +102,7 @@
                         </div>
                         <div class="clearfix"></div>
                     </div>
+                </ul>
             </div>
         </div>
         <div class="row sub-para-w3layouts mt-5">

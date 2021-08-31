@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView
 from django.views.generic.base import View
 from .forms import ReviewForm
-from .models import Game, Category
+from .models import Game, Category, Company
 
 
 
@@ -45,3 +45,9 @@ class AddReview(View):
             form.save()
         messages.add_message(request, messages.INFO, 'Ваш отзыв успешно добавлен')
         return redirect(game.get_absolute_url())
+
+
+class CompanyView(DetailView):
+    model = Company
+    template_name = 'games/company.html'
+    slug_field = 'name' #Поле,по которому будем искать компанию
