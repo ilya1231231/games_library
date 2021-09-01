@@ -24,9 +24,13 @@ class Company(models.Model):
     year = models.PositiveIntegerField('Год основания', default=0)
     description = models.TextField('Описание')
     image = models.ImageField('Изображение', upload_to='companies')
+    country = models.CharField('Страна', max_length=150, default='USA')
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse('company_detail', kwargs={'slug':self.name})
 
     class Meta:
         verbose_name = 'Компания-разработчик'
@@ -104,7 +108,7 @@ class Game(models.Model):
     year = models.PositiveIntegerField('Дата выхода', default=2000)
     country = models.CharField('Страна разработчик', max_length=160)
     release_date = models.DateField('Дата выхода', default=date.today)
-    company = models.ManyToManyField(Company, verbose_name='Компания разработчик')
+    company = models.ManyToManyField(Company, verbose_name='Компания разработчик', related_name='related_company')
     genre = models.ManyToManyField(Genre, verbose_name='Жанры игры')
     game_platform = models.ManyToManyField(GamePlatform, verbose_name='Игровая платформа')
     category = models.ForeignKey(Category, verbose_name='Категория', on_delete=models.SET_NULL, null=True)

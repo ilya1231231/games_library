@@ -18,7 +18,7 @@
 <div class="left-ads-display col-lg-8">
         <div class="row">
             <div class="desc1-left col-md-6">
-                <img src="{{ company.poster.url }}" class="img-fluid" alt="">
+                <img src="{{ company.image.url }}" class="img-fluid" alt="">
             </div>
             <div class="desc1-right col-md-6 pl-lg-4">
                 <h3 class="editContent">
@@ -28,18 +28,18 @@
             </div>
         </div>
         <div class="row sub-para-w3layouts mt-5">
-            <h3 class="shop-sing editContent" style="outline: none; cursor: inherit;">
-                Об игре {{ game.title }}
-            </h3>
                 <ul>
+                        <h3 class="shop-sing editContent" style="outline: none; cursor: inherit;">
+                            О компании {{ company.name }}
+                        </h3>
                     <li>
-                        <span><b>Год:</b> {{ game.year }}</span>
+                        <span><b>Год:</b> {{ company.year }}</span>
                     </li>
                     <li>
-                        <span><b>Страна:</b> {{ game.country }}</span>
+                        <span><b>Страна:</b> {{ company.country }}</span>
                     </li>
                     <li>
-                        <span><b>Компания - разработчик</b>
+                        <span><b>Описание компании</b>
                             {% for company in game.company.all %}
                                 {{ company.name }}
                             {% endfor %}
@@ -47,9 +47,22 @@
                     </li>
                 </ul>
             <p class="editContent" style="outline: none; cursor: inherit;">
-                {{ game.description|safe}}
+                {{ company.description }}
             </p>
         </div>
         <hr>
+        <div>
+            <li>
+                <span><b>Игры компании :</b>
+                    <div>
+                    {% for game in company.related_company.all %}
+                            <a>{{ game.title }}</a>
+                            <img src="{{ game.poster.url }}" width="80" height="auto" alt="">
+                    {% endfor %}
+                    </div>
+                </span>
+            </li>
+        </div>
+
     </div>
 {% endblock game %}

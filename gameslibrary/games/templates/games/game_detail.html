@@ -32,17 +32,17 @@
                         <span><b>Страна:</b> {{ game.country }}</span>
                     </li>
                     <li style="list-style: none">
-                                    <span><b>Компания - разработчик</b>
-                                        {% for company in game.company.all %}
-                                            <a href="{% url 'company_detail' company.name %}">
-                                                {{ company.name }}
-                                            </a>
-                                        {% endfor %}
-                                    </span>
+                        <span><b>Компания - разработчик</b>
+                            {% for company in game.company.all %}
+                                <a href="{{ company.get_absolute_url }}">
+                                    {{ company.name }}
+                                </a>
+                            {% endfor %}
+                        </span>
                     </li>
                     <li style="list-style: none"><span><b></b>
                         {% for game_platform in game.game_platform.all %}
-                            {{ game_platform.name }}
+                            {{ game_platform.name }} /
                         {% endfor %}
                                 </span>
                     </li>
