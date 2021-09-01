@@ -1,13 +1,26 @@
 from django.contrib import messages
+from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView
 from django.views.generic.base import View
 from .forms import ReviewForm
-from .models import Game, Category, Company
+from .models import (Game,
+                     Category,
+                     Company,
+                     Genre)
 
 
+class GenreYears:
+    '''Класс для хранения данных'''
 
-class GameView(ListView):
+    def get_genre(self):
+        return Genre.objects.all()
+
+    def get_year(self):
+        return Game.objects.filter(draft=False).values('year')  # Забираем поле years
+
+
+class GameView(GenreYears, ListView):
     '''Список игр'''
     model = Game
     queryset = Game.objects.filter(draft=False)
@@ -18,11 +31,7 @@ class GameView(ListView):
     #     return context
 
 
-
-
-
-
-class GameDetailView(DetailView):
+class GameDetailView(GenreYears, DetailView):
     '''Отдельная игра'''
     model = Game
     slug_field = 'url'
@@ -32,22 +41,39 @@ class GameDetailView(DetailView):
     #     return render(request, 'games/game_detail.html', {'game':game})
 
 
-class AddReview(View):
+class AddReview(GenreYears, View):
     '''Отправка отзывов'''
+
     def post(self, request, pk):
-        form = ReviewForm(request.POST) #Данные в форме
+        form = ReviewForm(request.POST)  # Данные в форме
         game = Game.objects.get(id=pk)
         if form.is_valid():
-            form = form.save(commit=False)      #Хотим приостановить сохранение перед привязкой к игре
-            if request.POST.get('parent', None):    #Ищем в пост запросе ключ parent(Имя нашего поля)
-                form.parent_id = int(request.POST.get('parent'))    #достаем значение нашего ключа parent
-            form.game = game       #Сохраняем форму в определенную игру
+            form = form.save(commit=False)  # Хотим приостановить сохранение перед привязкой к игре
+            if request.POST.get('parent', None):  # Ищем в пост запросе ключ parent(Имя нашего поля)
+                form.parent_id = int(request.POST.get('parent'))  # достаем значение нашего ключа parent
+            form.game = game  # Сохраняем форму в определенную игру
             form.save()
         messages.add_message(request, messages.INFO, 'Ваш отзыв успешно добавлен')
         return redirect(game.get_absolute_url())
 
 
-class CompanyView(DetailView):
+class CompanyView(GenreYears, DetailView):
     model = Company
     template_name = 'games/company.html'
-    slug_field = 'name' #Поле,по которому будем искать компанию
+    slug_field = 'name'  # Поле,по которому будем искать компанию
+
+
+class GameFilter(GenreYears, ListView):
+
+    def get_queryset(self):
+        queryset = Game.objects.filter(
+            Q(year__in=self.request.GET.getlist('year'))|
+            Q(genre__in=self.request.GET.getlist('genre'))
+        )
+        return queryset
+
+
+'''
+Фильтрация фильмов, там,где года будут входить в список, возвращаемого с фронта(список годов)
+с помощью метода getlist из GET запроса достаем все значения полей 'year'
+'''

@@ -66,7 +66,7 @@ class GameAdmin(admin.ModelAdmin):
             'fields': (('title',),)
         }),
         ('Описание и постер игры', {
-            'fields': (('description', 'get_image'),)
+            'fields': (('description', 'get_image', 'poster'),)
         }),
         ('Даты выпуска', {
             'fields': (('year', 'country', 'release_date'),)
