@@ -47,7 +47,7 @@
                                 </span>
                     </li>
                     <li style="list-style: none"><span><b>Жанр:</b>
-                        {% for genre in game.genres.all %}
+                        {% for genre in game.genre.all %}
                             {{ genre.name }}
                         {% endfor %}
                                     </span>
@@ -55,22 +55,24 @@
                     <li style="list-style: none">
                         <span><b>Премьера в мире:</b> {{ game.release_date }}</span>
                     </li>
-                    <li style="list-style: none">
-                        <a href="#"><b>Рейтинг:</b>
-                            <span class="fa fa-star" aria-hidden="true"
-                                  style="outline: none; cursor: inherit;"></span>
-                            <span class="fa fa-star" aria-hidden="true"
-                                  style="outline: none; cursor: inherit;"></span>
-                            <span class="fa fa-star" aria-hidden="true"
-                                  style="outline: none; cursor: inherit;"></span>
-                            <span class="fa fa-star" aria-hidden="true"
-                                  style="outline: none; cursor: inherit;"></span>
-                            <span class="fa fa-star" aria-hidden="true"
-                                  style="outline: none; cursor: inherit;"></span>
-                            <span class="editContent"
-                                  style="outline: none; cursor: inherit;">5.0</span>
-                        </a>
+ <!--RATING-->
+                    <li>
+                        <form action="{% url 'add_rating' %}" method="post", name="rating">
+                            <b>Рейтинг:</b>
+                            {% csrf_token %}
+                            <input type="hidden" value="{{ game.id }}" name="game">
+                                <span class="rating">
+                                    {% for k, v in star_form.fields.star.choices %}
+                                        <input id="rating{{ v }}" type="radio" name="star"
+                                            value="{{ v }}">
+                                        <label for="rating{{ v }}">{{ k }}</label>
+                                    {% endfor %}
+                                </span>
+                                <span class="editContent">5.0</span>
+                        </form>
                     </li>
+<!--RATING-->
+
                     <div class="share-desc">
                         <div class="share">
                             <h4 class="editContent"

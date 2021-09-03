@@ -30,7 +30,7 @@ class Company(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('company_detail', kwargs={'slug':self.name})
+        return reverse('company_detail', kwargs={'slug': self.name})
 
     class Meta:
         verbose_name = 'Компания-разработчик'
@@ -98,8 +98,6 @@ class GamePlatform(models.Model):
         verbose_name_plural = 'Игрорвые платформы'
 
 
-
-
 class Game(models.Model):
     '''Игра'''
     title = models.CharField('Название', max_length=160)
@@ -122,7 +120,7 @@ class Game(models.Model):
         return reverse('game_detail', kwargs={'slug': self.url})
 
     def get_review(self):
-        return self.review_set.filter(parent__isnull=True)      #Возвращаем комментарии без родителей
+        return self.review_set.filter(parent__isnull=True)  # Возвращаем комментарии без родителей
 
     class Meta:
         verbose_name = 'Игра'
@@ -149,11 +147,12 @@ class RatingStar(models.Model):
     value = models.SmallIntegerField('Значение', default=0)
 
     def __str__(self):
-        return self.value
+        return str(self.value)
 
     class Meta:
         verbose_name = 'Звезда рейтинга'
         verbose_name_plural = 'Звезды рейтинга'
+        ordering = ["-value"]  # Для вывода по порядку от меньшего к большему(сортировка по полю value)
 
 
 class Rating(models.Model):
@@ -166,8 +165,8 @@ class Rating(models.Model):
         return '{} - {}'.format(self.star, self.game)
 
     class Meta:
-        verbose_name = 'Звезда рейтинга'
-        verbose_name_plural = 'Звезды рейтинга'
+        verbose_name = 'Рейтинг'
+        verbose_name_plural = 'Рейтинги'
 
 
 class Review(models.Model):

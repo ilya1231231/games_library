@@ -3,7 +3,7 @@ from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView
 from django.views.generic.base import View
-from .forms import ReviewForm
+from .forms import ReviewForm, RatingForm
 from .models import (Game,
                      Category,
                      Company,
@@ -36,6 +36,11 @@ class GameDetailView(GenreYears, DetailView):
     model = Game
     slug_field = 'url'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['star_form'] = RatingForm
+        return context
+
     # def get(self, request, slug):
     #     game = Game.objects.get(url=slug)
     #     return render(request, 'games/game_detail.html', {'game':game})
@@ -67,7 +72,7 @@ class GameFilter(GenreYears, ListView):
 
     def get_queryset(self):
         queryset = Game.objects.filter(
-            Q(year__in=self.request.GET.getlist('year'))|
+            Q(year__in=self.request.GET.getlist('year')),
             Q(genre__in=self.request.GET.getlist('genre'))
         )
         return queryset
