@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.db.models import Q
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView
 from django.views.generic.base import View
@@ -7,7 +8,8 @@ from .forms import ReviewForm, RatingForm
 from .models import (Game,
                      Category,
                      Company,
-                     Genre)
+                     Genre,
+                     Rating)
 
 
 class GenreYears:
@@ -82,3 +84,26 @@ class GameFilter(GenreYears, ListView):
 Фильтрация фильмов, там,где года будут входить в список, возвращаемого с фронта(список годов)
 с помощью метода getlist из GET запроса достаем все значения полей 'year'
 '''
+
+
+class AddStarRating(View):
+
+    def get_client_ip(self, request):
+        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+        if x_forwarded_for:
+            ip = x_forwarded_for.split(',')[0]
+        else:
+            ip = request.META.get('REMOTE_ADDR')
+        return ip
+
+    def post(self, request):
+        form = RatingForm(request.POST)  # когда придет POST запрос, в форму передаем request.POST для генерации формы
+        if form.is_valid():
+            Rating.objects.update_or_create(
+                ip=self.get_client_ip(request),
+                game_id=int(request.POST.get('game')),
+                defaults={'star_id': int(request.POST.get('star'))}
+            )
+            return HttpResponse(status=201)
+        else:
+            return HttpResponse(status=400)
