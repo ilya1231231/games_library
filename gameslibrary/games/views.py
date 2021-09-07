@@ -71,6 +71,19 @@ class CompanyView(GenreYears, DetailView):
     slug_field = 'name'  # Поле,по которому будем искать компанию
 
 
+class Search(ListView):
+
+    paginate_by = 3
+
+    def get_queryset(self):
+        return Game.objects.filter(title__icontains=self.request.GET.get('search'))
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['search'] = self.request.GET.get('search')
+        return context
+
+
 class GameFilter(GenreYears, ListView):
     '''Фильтр игр'''
     paginate_by = 2
