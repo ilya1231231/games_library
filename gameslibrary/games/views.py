@@ -26,6 +26,7 @@ class GameView(GenreYears, ListView):
     '''Список игр'''
     model = Game
     queryset = Game.objects.filter(draft=False)
+    paginate_by = 2
 
     # def get_context_data(self,*args, **kwargs):
     #     context = super().get_context_data(*args, **kwargs)
@@ -71,17 +72,29 @@ class CompanyView(GenreYears, DetailView):
 
 
 class GameFilter(GenreYears, ListView):
+    '''Фильтр игр'''
+    paginate_by = 2
 
     def get_queryset(self):
         queryset = Game.objects.filter(
             Q(year__in=self.request.GET.getlist('year')),
             Q(genre__in=self.request.GET.getlist('genre'))
-        )
+        ).distinct()  # Убирает повторяющиеся элементы
         return queryset
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['year'] = ''.join(
+            [f'year={x}&' for x in self.request.GET.getlist('year')]
+        )  # Генерация ссылки на отфильтрованную страницу
+        context['genre'] = ''.join(
+            [f'genre={x}' for x in self.request.GET.getlist('genre')]
+        )
+        return context
 
 
 '''
-Фильтрация фильмов, там,где года будут входить в список, возвращаемого с фронта(список годов)
+Фильтрация игр, там,где года будут входить в список, возвращаемого с фронта(список годов)
 с помощью метода getlist из GET запроса достаем все значения полей 'year'
 '''
 
@@ -97,13 +110,30 @@ class AddStarRating(View):
         return ip
 
     def post(self, request):
+
         form = RatingForm(request.POST)  # когда придет POST запрос, в форму передаем request.POST для генерации формы
         if form.is_valid():
             Rating.objects.update_or_create(
                 ip=self.get_client_ip(request),
                 game_id=int(request.POST.get('game')),
-                defaults={'star_id': int(request.POST.get('star'))}
+                defaults={'star_id': int(request.POST.get('star'))}  # Изменяемые поля
             )
+
+            # c = Rating.objects.get(ip=self.get_client_ip(request), game_id=int(request.POST.get('game'))).star
+            # print(c)
             return HttpResponse(status=201)
         else:
             return HttpResponse(status=400)
+
+# class RatingScreen(View):
+#
+#     def get_client_ip(self, request):
+#         x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+#         if x_forwarded_for:
+#             ip = x_forwarded_for.split(',')[0]
+#         else:
+#             ip = request.META.get('REMOTE_ADDR')
+#         return ip
+#
+#     ipu = get_client_ip
+#     star = Rating.objects.filter(ip=ipu)

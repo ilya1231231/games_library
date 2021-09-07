@@ -122,6 +122,12 @@ class Game(models.Model):
     def get_review(self):
         return self.review_set.filter(parent__isnull=True)  # Возвращаем комментарии без родителей
 
+    # def get_star(self):   для теста
+    #     return str(self.rating_set.get(ip='127.0.0.1').star)
+
+
+
+
     class Meta:
         verbose_name = 'Игра'
         verbose_name_plural = 'Игры'
@@ -163,6 +169,19 @@ class Rating(models.Model):
 
     def __str__(self):
         return '{} - {}'.format(self.star, self.game)
+
+    # def get_client_ip(self, request):
+    #     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    #     if x_forwarded_for:
+    #         ip = x_forwarded_for.split(',')[0]
+    #     else:
+    #         ip = request.META.get('REMOTE_ADDR')
+    #     return ip
+
+    def get_star(self):
+        return self.Rating.objects.get(ip='127.0.0.1').star
+
+
 
     class Meta:
         verbose_name = 'Рейтинг'

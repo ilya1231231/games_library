@@ -57,12 +57,13 @@
                     </li>
  <!--RATING-->
                     <li>
-                        <form action="{% url 'add_rating' %}" method="post", name="rating">
+                        <form action="{% url 'add_rating' %}" method="post" name="rating">
                             <b>Рейтинг:</b>
                             {% csrf_token %}
                             <input type="hidden" value="{{ game.id }}" name="game">
                                 <span class="rating">
                                     {% for k, v in star_form.fields.star.choices %}
+
                                         <input id="rating{{ v }}" type="radio" name="star"
                                             value="{{ k }}">
                                         <label for="rating{{ v }}">{{ k }}</label>
